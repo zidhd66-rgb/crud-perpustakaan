@@ -4,7 +4,7 @@
 **Teknologi yang dipilih:** **PHP Native** (PDO + MySQL/MariaDB)
 **Database:** `db_perpustakaan`
 
-## 📌 Identitas Mahasiswa
+## Identitas Mahasiswa
 
 | | |
 |---|---|
