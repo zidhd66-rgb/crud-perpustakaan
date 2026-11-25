@@ -56,7 +56,7 @@ perpus-php/
 │   ├── tambah.php             # CREATE : catat peminjaman (transaksi DB)
 │   ├── kembalikan.php         # UPDATE : proses pengembalian (transaksi DB)
 │   └── hapus.php              # DELETE : hapus transaksi (transaksi DB)
-└── screenshots/               # tangkapan layar aplikasi (7 gambar)
+└── screenshots/               # tangkapan layar aplikasi (8 gambar)
 ```
 
 ---
