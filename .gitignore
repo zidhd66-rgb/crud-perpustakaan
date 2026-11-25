@@ -1,0 +1,21 @@
+# Dependensi & lingkungan
+venv/
+node_modules/
+vendor/
+
+# Konfigurasi rahasia (jangan diunggah)
+.env
+config/config.local.php
+
+# Log & file sistem
+*.log
+*.tmp
+Thumbs.db
+.DS_Store
+
+# Editor
+.vscode/
+.idea/
+
+# Berkas uji sementara
+database/*.log
