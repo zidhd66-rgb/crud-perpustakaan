@@ -1,8 +1,18 @@
 # Sistem Informasi Perpustakaan — CRUD Dasar (Studi Kasus 1)
 
 **Mata Kuliah:** Basis Data — Materi Praktikum CRUD
-**Tekologi yang dipilih:** **PHP Native** (PDO + MySQL/MariaDB)
+**Teknologi yang dipilih:** **PHP Native** (PDO + MySQL/MariaDB)
 **Database:** `db_perpustakaan`
+
+## 📌 Identitas Mahasiswa
+
+| | |
+|---|---|
+| **Nama** | Zaidan Fayyadh Ha'il Daffa |
+| **NIM** | 26091397123 |
+| **Kelas** | 2026D |
+
+---
 
 Aplikasi CRUD sederhana untuk mengelola **buku** dan **transaksi peminjaman** pada sebuah perpustakaan.
 
@@ -33,18 +43,20 @@ perpus-php/
 ├── assets/
 │   └── css/style.css          # CSS tambahan
 ├── database/
-│   └── db_perpustakaan.sql    # skrip pembuatan DB + data awal
+│   ├── db_perpustakaan.sql    # skrip pembuatan DB + data awal
+│   └── tes_crud.php           # pengujian otomatis 16 skenario
 ├── buku/                      # ===== MODUL BUKU =====
 │   ├── index.php              # READ   : daftar + pencarian
 │   ├── tambah.php             # CREATE : form + simpan
 │   ├── edit.php               # UPDATE : form + perbarui
 │   ├── hapus.php              # DELETE : hapus (POST saja)
 │   └── _form.php              # potongan form (dipakai tambah & edit)
-└── peminjaman/                # ===== MODUL PEMINJAMAN =====
-    ├── index.php              # READ   : daftar transaksi (JOIN)
-    ├── tambah.php             # CREATE : catat peminjaman (transaksi DB)
-    ├── kembalikan.php         # UPDATE : proses pengembalian (transaksi DB)
-    └── hapus.php              # DELETE : hapus transaksi (transaksi DB)
+├── peminjaman/                # ===== MODUL PEMINJAMAN =====
+│   ├── index.php              # READ   : daftar transaksi (JOIN)
+│   ├── tambah.php             # CREATE : catat peminjaman (transaksi DB)
+│   ├── kembalikan.php         # UPDATE : proses pengembalian (transaksi DB)
+│   └── hapus.php              # DELETE : hapus transaksi (transaksi DB)
+└── screenshots/               # tangkapan layar aplikasi (7 gambar)
 ```
 
 ---
@@ -59,33 +71,75 @@ perpus-php/
 
 ## 4. Cara Menjalankan
 
-### Langkah 1 — Salin folder
-Letakkan folder `perpus-php` ke `C:\xampp\htdocs\` (XAMPP) atau `C:\laragon\www\` (Laragon).
+### Langkah 1 — Salin folder project
+Letakkan folder `perpus-php` ke dalam folder web server:
+- **XAMPP** → `C:\xampp\htdocs\perpus-php`
+- **Laragon** → `C:\laragon\www\perpus-php`
 
 ### Langkah 2 — Nyalakan Apache & MySQL
-Buka **XAMPP Control Panel** → tekan **Start** pada **Apache** dan **MySQL**.
+Buka **XAMPP Control Panel** → tekan tombol **Start** pada **Apache** dan **MySQL**.
+Pastikan keduanya bertanda **hijau** (running).
+
+> Port default: Apache = `80`, MySQL = `3306`.
 
 ### Langkah 3 — Buat basis data
-Buka <http://localhost/phpmyadmin> → tab **SQL** → tempel isi `database/db_perpustakaan.sql` → **Go**.
+Buka **phpMyAdmin**: <http://localhost/phpmyadmin>
 
-Atau lewat terminal:
+1. Klik tab **SQL**.
+2. Tempel seluruh isi file [`database/db_perpustakaan.sql`](database/db_perpustakaan.sql).
+3. Klik **Go**.
+
+Skrip ini akan otomatis membuat:
+- Database `db_perpustakaan`
+- Tabel `anggota`, `buku`, `peminjaman`
+- Data awal: **7 buku**, **6 anggota**, **12 transaksi peminjaman**
+
+Hasilnya di phpMyAdmin:
+
+![Basis data db_perpustakaan dengan 3 tabel](screenshots/08-phpmyadmin-db.jpg)
+
+**Alternatif lewat terminal:**
 
 ```bash
-mysql -u root -p < database/db_perpustakaan.sql
+cd C:\xampp\htdocs\perpus-php\database
+mysql -u root < db_perpustakaan.sql
 ```
 
-### Langkah 4 — Buka aplikasi
+### Langkah 4 — Jalankan aplikasi
+Buka browser dan akses:
 
 ```
 http://localhost/perpus-php/
 ```
 
-> **Catatan:** jika folder diberi nama lain, ubah `BASE_URL` di `config/config.php`.
-> Untuk menjalankan dengan server bawaan PHP, set `BASE_URL` menjadi `''` lalu:
-> ```bash
-> cd perpus-php
-> php -S localhost:8000
-> ```
+Aplikasi akan mengarahkan ke halaman **Data Buku**.
+
+### Langkah 5 — Mulai gunakan
+Gunakan menu navigasi di bagian atas untuk berpindah antar modul:
+- **Buku** → kelola data buku (tambah, cari, edit, hapus)
+- **Peminjaman** → catat peminjaman, kembalikan buku, hapus transaksi
+
+### Konfigurasi (opsional)
+Jika folder diberi nama lain, atau kredensial MySQL Anda berbeda
+(mis. root memakai password), ubah nilai berikut di `config/config.php`:
+
+```php
+define('BASE_URL', '/perpus-php');   // sesuaikan dengan nama folder
+define('DB_HOST', 'localhost');
+define('DB_NAME', 'db_perpustakaan');
+define('DB_USER', 'root');
+define('DB_PASS', '');               // isi password bila ada
+```
+
+### Menjalankan dengan server bawaan PHP (alternatif tanpa XAMPP)
+Set `BASE_URL` menjadi `''` di `config/config.php`, lalu:
+
+```bash
+cd perpus-php
+php -S localhost:8000
+```
+
+Buka <http://localhost:8000/>.
 
 ---
 
@@ -180,26 +234,26 @@ Hasil terakhir: **16 PASS / 0 FAIL**.
 
 ## 9. Tangkapan Layar
 
-### Daftar buku (Read + pencarian)
-![Daftar Buku](screenshots/01-daftar-buku.jpg)
+### 9.1 Basis Data
 
-### Form tambah buku (Create)
-![Tambah Buku](screenshots/02-tambah-buku.jpg)
+![Basis data db_perpustakaan](screenshots/08-phpmyadmin-db.jpg)
 
-### Form edit buku — kolom ID dibuat *readonly* (Update)
-![Edit Buku](screenshots/03-edit-buku.jpg)
+### 9.2 Modul Buku
 
-### Pesan flash sukses setelah menambah buku (Post/Redirect/Get)
-![Pesan Sukses](screenshots/04-pesan-sukses.jpg)
+| Operasi | Tangkapan layar |
+|---------|----------------|
+| **Create** | ![Form tambah buku](screenshots/02-tambah-buku.jpg) |
+| **Read** (daftar + pencarian) | ![Daftar Buku](screenshots/01-daftar-buku.jpg) |
+| **Read** (pesan flash sukses — Post/Redirect/Get) | ![Pesan Sukses](screenshots/04-pesan-sukses.jpg) |
+| **Update** (kolom ID *readonly*) | ![Edit Buku](screenshots/03-edit-buku.jpg) |
+| **Delete** ditolak *foreign key* (error 1451) | ![Hapus Ditolak](screenshots/05-hapus-ditolak.jpg) |
 
-### Penghapusan ditolak *foreign key* — buku punya riwayat peminjaman (error 1451)
-![Hapus Ditolak](screenshots/05-hapus-ditolak.jpg)
+### 9.3 Modul Peminjaman
 
-### Daftar peminjaman — INNER JOIN, filter status, badge keterlambatan (Read)
-![Daftar Peminjaman](screenshots/06-daftar-peminjaman.jpg)
-
-### Form peminjaman — dropdown anggota & buku yang stoknya tersedia (Create)
-![Pinjam Buku](screenshots/07-pinjam-buku.jpg)
+| Operasi | Tangkapan layar |
+|---------|----------------|
+| **Create** (dropdown anggota & buku yang stoknya tersedia) | ![Pinjam Buku](screenshots/07-pinjam-buku.jpg) |
+| **Read** (INNER JOIN + filter status + badge keterlambatan) | ![Daftar Peminjaman](screenshots/06-daftar-peminjaman.jpg) |
 
 ---
 
